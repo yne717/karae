@@ -15,10 +15,14 @@ const C_NEED_DATA_LEN = 1224
 const BUFF_SIZE = 1304
 
 var (
-	Device = flag.String("device", "22ea:0039", "select device. default \"22ea:0039\" ")
-	Key    = flag.String("key", "none", "select key.")
-	Number = flag.Int("number", 999999, "select number.")
-	Debug  = flag.Int("debug", 3, "Debug level for libusb")
+	Device    = flag.String("device", "22ea:0039", "select device. default \"22ea:0039\" ")
+	Config    = flag.Int("config", 1, "config number.")
+	Interface = flag.Int("interface", 3, "interface number.")
+	Setup     = flag.Int("setup", 0, "setup number.")
+	Ep        = flag.Int("ep", 4, "endpoint number.")
+	Key       = flag.String("key", "none", "select key.")
+	Number    = flag.Int("number", 999999, "select number.")
+	Debug     = flag.Int("debug", 3, "Debug level for libusb")
 )
 
 func main() {
@@ -60,7 +64,7 @@ func main() {
 		ir_data, ir_data_size = getDataByNumber(*Number)
 	}
 
-	ep, err := devs[0].OpenEndpoint(uint8(1), uint8(0), uint8(0), uint8(1)|uint8(usb.ENDPOINT_DIR_OUT))
+	ep, err := devs[0].OpenEndpoint(uint8(*Config), uint8(*Interface), uint8(*Setup), uint8(*Ep)|uint8(usb.ENDPOINT_DIR_OUT))
 	if err != nil {
 		log.Fatalf("open device faild: %s", err)
 	}
